@@ -4,7 +4,8 @@
   "description": "web scrapper app for bank mega promo scrapper",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc --build && node ./lib/app.js"
   },
   "author": "nielchevo",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "puppeteer": "^2.1.1"
   },
   "devDependencies": {
+    "@types/node": "^13.7.1",
     "@types/puppeteer": "^2.0.0",
     "typescript": "^3.7.5"
   }
