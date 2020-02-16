@@ -4,6 +4,8 @@ import { FileManager } from "./FileManager";
 
 export class App {
 
+  private promoThumbnail:Array<string> = [];
+
   constructor() { }
 
   /**
@@ -25,32 +27,49 @@ export class App {
   
       const subPromo = await page.$$eval("#contentpromolain2 div#subcatpromo div img", e => {
         return e.map(i => {
-          return i;
+          return `img#${i.getAttribute('id')}`;
         });
       })
       console.log(subPromo);
-    
-      // on click handle
-      const ds = await page.$('img#travel');
-        ds?.click().then( ()=> console.log("done !"));
       
-      await page.waitForSelector("#contenpromolain2 ", { timeout: 3000});
-      await page.screenshot({ path: './images.jpeg', type: "jpeg"});
+      /* Main looping flow */
+      for (const promo of subPromo) {
+        // simulate click promo
+        console.log('category : ', promo.toString());
+        const ds = await page.$(promo.toString());
+        ds?.click().then( ()=> console.log("done !"));
 
-      // const x = await (await page.waitForSelector("table.tablepaging")).$$eval("#contentpromolain2 table.tablepaging tr td a", el => { 
-      //     return el.map(e => {
-      //       if(e.hasAttribute('id')) {
-      //         return e.outerHTML;
-      //       }
-      //     });
-      // });
-      // console.log(x);
+        await page.waitFor(1500); //wait page to
+        await page.screenshot({ path: './images.jpeg', type: "jpeg"});
+        
+        const pagination = await (await page.waitForSelector("table.tablepaging")).$$eval("#contentpromolain2 table.tablepaging tr td a", el => { 
+          const newEl = el.filter(e => e.hasAttribute('id'));
+          return newEl.map(e=>e);
+        });
+      }
+      
+      // get promo detail 
+      const promoThumbnail = await page.$$eval("#promolain li a", (el) => {
+        return el.map((e) => {
+          return e.getAttribute('href');
+        });
+      });
 
+      promoThumbnail.forEach(element => {
+        console.log(`Begin new page ${element?.toString()}`);
+      });  
+
+      console.log(promoThumbnail);
+      
       await page.close();
       await browser.close();
     } catch (error) {
       if (error) console.log(error);
     }
+  }
+
+  private scrapeNewPage() {
+    
   }
 }
 
