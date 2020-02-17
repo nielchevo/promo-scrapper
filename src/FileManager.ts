@@ -1,6 +1,6 @@
 import { writeFile, existsSync } from "fs";
 
-var FILENAME = 'index_scraped.html';
+var FILENAME = 'solution.json';
 
 export class FileManager {
 

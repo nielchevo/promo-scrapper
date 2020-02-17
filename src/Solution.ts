@@ -1,14 +1,11 @@
 import puppeteer from 'puppeteer';
 
 import { FileManager } from "./FileManager";
-import { ResolveOptions } from 'dns';
-import { IpcNetConnectOpts } from 'net';
-import { stringify } from 'querystring';
 
 export class Solution {
   
   private mMainURL = "https://www.bankmega.com/";
-  private DELAY_CLICK = 4000;
+  private DELAY_CLICK = 2000;
   private solutionJSON: Array<Object> = [];
 
   constructor() {
@@ -120,11 +117,11 @@ export class Solution {
         
         this.solutionJSON.push({category: promo, data: data});
       }
+      FileManager.SaveToFile(JSON.stringify(this.solutionJSON));
 
       await page.close();
       await browser.close();
 
-      FileManager.SaveToFile(JSON.stringify(this.solutionJSON).toString());
     } catch (error) {
       if (error) console.log(error);
     }
